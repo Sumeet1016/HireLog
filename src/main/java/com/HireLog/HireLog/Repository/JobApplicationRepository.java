@@ -1,0 +1,11 @@
+package com.HireLog.HireLog.Repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.HireLog.HireLog.Entity.JobApplication;
+
+public interface JobApplicationRepository extends JpaRepository<JobApplication,Long> {
+    List <JobApplication> findByUserId(Long userId);
+}
