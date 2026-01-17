@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,15 +19,20 @@ public class JobApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Companyname cannot is Required")
     private String companyName;
 
+    @NotBlank(message = "Job Title is required")
     private String jobTitle;
 
+    
     private String location;
 
+    @NotNull(message="Application Status is required")
       @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
 
+    @NotNull(message = "Applied date is required")
     private LocalDate appliedDate;
 
     @Column(length=1000)

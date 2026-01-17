@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.PatchExchange;
 
 import com.HireLog.HireLog.Dto.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.JobApplicationResponseDto;
 import com.HireLog.HireLog.Service.JobApplicationService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +34,7 @@ public class JobApplicationController {
     @PostMapping("/{userId}")
     public ResponseEntity<JobApplicationResponseDto> createJob(
         @PathVariable Long userId,
-        @RequestBody JobApplicationRequestDto requestDto
+        @Valid @RequestBody JobApplicationRequestDto requestDto
     ){
         return new ResponseEntity<>(jobApplicationService.createJob(requestDto, userId),HttpStatus.CREATED);
     }
@@ -56,12 +56,12 @@ public class JobApplicationController {
     public ResponseEntity <JobApplicationResponseDto> updateJob(
         @PathVariable Long userId,
         @PathVariable Long jobId,
-        @RequestBody JobApplicationRequestDto requestDto
+        @Valid @RequestBody JobApplicationRequestDto requestDto
     ){
         return ResponseEntity.ok(jobApplicationService.updateJob(jobId, requestDto, userId));
     }
 
-    @DeleteMapping("/users/{userId}/jobs/{jobId}")
+    @DeleteMapping("/{userId}/{jobId}")
     public ResponseEntity<Void> deleteJob(
             @PathVariable Long jobId,
             @PathVariable Long userId) {
