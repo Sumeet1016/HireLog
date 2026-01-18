@@ -1,4 +1,4 @@
-package com.HireLog.HireLog.Dto;
+package com.HireLog.HireLog.Dto.job;
 
 import java.time.LocalDate;
 
@@ -15,4 +15,5 @@ public class JobApplicationResponseDto {
     private String location;
     private String status;
     private LocalDate appliedDate;
+    private String notes;
 }

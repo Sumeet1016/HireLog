@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.HireLog.HireLog.Dto.JobApplicationRequestDto;
-import com.HireLog.HireLog.Dto.JobApplicationResponseDto;
+import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
+import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Entity.ApplicationStatus;
 import com.HireLog.HireLog.Entity.JobApplication;
 import com.HireLog.HireLog.Entity.User;
@@ -87,7 +87,10 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         job.setCompanyName(requestDto.getCompanyName());
         job.setJobTitle(requestDto.getJobTitle());
         job.setLocation(requestDto.getLocation());
+
+        if(requestDto.getNotes()!=null){
         job.setNotes(requestDto.getNotes());
+        }
 
         JobApplication updatedJob = jobApplicationRepository.save(job);
 
@@ -135,7 +138,7 @@ public void deleteJob(Long jobId, Long userId) {
         dto.setLocation(job.getLocation());
         dto.setStatus(job.getStatus().name());
         dto.setAppliedDate(job.getAppliedDate());
-
+        dto.setNotes(job.getNotes());
         return dto;
     }
 }

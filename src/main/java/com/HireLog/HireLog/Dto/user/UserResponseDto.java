@@ -1,4 +1,4 @@
-package com.HireLog.HireLog.Dto;
+package com.HireLog.HireLog.Dto.user;
 
 import lombok.Getter;
 import lombok.Setter;

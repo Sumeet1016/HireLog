@@ -1,6 +1,5 @@
 package com.HireLog.HireLog.Exception;
-import java.util.HashMap;
-import java.util.Map;
+
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
@@ -8,71 +7,59 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.validation.ConstraintViolationException;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity <ErrorResponse> handleResponseStatusException(
-        ResponseStatusException ex,
-        HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(
+            ResponseStatusException ex,
+            WebRequest request) {
 
-            ErrorResponse error=new ErrorResponse(
+        ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 ex.getStatusCode().value(),
                 ex.getStatusCode().toString(),
                 ex.getReason(),
-                request.getRequestURI()
-            );
+                request.getDescription(false).replace("uri=", ""));
 
-            return new ResponseEntity<>(error,ex.getStatusCode());
-        }
+        return new ResponseEntity<>(error, ex.getStatusCode());
+    }
 
-        @ExceptionHandler(Exception.class)
-        public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex,
-            HttpServletRequest request){
-                    ErrorResponse error =new ErrorResponse(
-                        LocalDateTime.now(),
-                        HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-                        ex.getMessage(),
-                        request.getRequestURI()
-                    );
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException ex,
+            WebRequest request) {
 
-                    return new ResponseEntity<>(error,HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            @ExceptionHandler(MethodArgumentNotValidException.class)
-            public ResponseEntity<Map<String,String>> handleValidationErrors(
-                MethodArgumentNotValidException ex
-            ){
-                Map<String,String> errors=new HashMap<>();
-
-                ex.getBindingResult()
+        String message = ex.getBindingResult()
                 .getFieldErrors()
-                .forEach(error->
-                     errors.put(error.getField(),
-            error.getDefaultMessage()));
-                    return ResponseEntity.badRequest().body(errors);
-            }
+                .get(0)
+                .getDefaultMessage();
 
-            @ExceptionHandler(ConstraintViolationException.class)
-            public ResponseEntity<Map<String, String>> handleConstraintViolation(
-                    ConstraintViolationException ex) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "BAD_REQUEST",
+                message,
+                request.getDescription(false).replace("uri=", ""));
 
-                Map<String, String> errors = new HashMap<>();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
-                ex.getConstraintViolations().forEach(violation -> {
-                    String field = violation.getPropertyPath().toString();
-                    errors.put(field, violation.getMessage());
-                });
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(
+            Exception ex,
+            WebRequest request) {
 
-                return ResponseEntity.badRequest().body(errors);
-            }
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "INTERNAL_SERVER_ERROR",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
 
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

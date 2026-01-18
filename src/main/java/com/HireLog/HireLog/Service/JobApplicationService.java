@@ -2,8 +2,8 @@ package com.HireLog.HireLog.Service;
 
 import java.util.List;
 
-import com.HireLog.HireLog.Dto.JobApplicationRequestDto;
-import com.HireLog.HireLog.Dto.JobApplicationResponseDto;
+import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
+import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 
 public interface JobApplicationService {
     

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.HireLog.HireLog.Dto.JobApplicationRequestDto;
-import com.HireLog.HireLog.Dto.JobApplicationResponseDto;
+import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
+import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Service.JobApplicationService;
 
 import jakarta.validation.Valid;
@@ -24,27 +24,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/jobs")
+@RequestMapping("/api/users/{userId}/jobs")
 @RequiredArgsConstructor
 public class JobApplicationController {
     
     private final JobApplicationService jobApplicationService;
 
   
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<JobApplicationResponseDto> createJob(
         @PathVariable Long userId,
         @Valid @RequestBody JobApplicationRequestDto requestDto
     ){
-        return new ResponseEntity<>(jobApplicationService.createJob(requestDto, userId),HttpStatus.CREATED);
+        JobApplicationResponseDto response=jobApplicationService.createJob(requestDto,userId);
+
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping
     public ResponseEntity<List<JobApplicationResponseDto>> getAllJobs(@PathVariable Long userId){
-        return ResponseEntity.ok(jobApplicationService.getAllJobs(userId));
+       return ResponseEntity.ok(jobApplicationService.getAllJobs(userId));
     }
 
-    @GetMapping("/{userId}/{jobId}")
+    @GetMapping("{jobId}")
     public  ResponseEntity<JobApplicationResponseDto> getJobById(
         @PathVariable Long userId,
         @PathVariable Long jobId
@@ -52,7 +54,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.getJobById(userId,jobId));
     }
      
-    @PutMapping("/{userId}/{jobId}")
+    @PutMapping("/{jobId}")
     public ResponseEntity <JobApplicationResponseDto> updateJob(
         @PathVariable Long userId,
         @PathVariable Long jobId,
@@ -61,7 +63,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.updateJob(jobId, requestDto, userId));
     }
 
-    @DeleteMapping("/{userId}/{jobId}")
+    @DeleteMapping("/{jobId}")
     public ResponseEntity<Void> deleteJob(
             @PathVariable Long jobId,
             @PathVariable Long userId) {

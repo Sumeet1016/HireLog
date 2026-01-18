@@ -35,7 +35,7 @@ public class JobApplication {
     @NotNull(message = "Applied date is required")
     private LocalDate appliedDate;
 
-    @Column(length=1000)
+    @Column(columnDefinition = "TEXT")
     private String notes;
 
     @ManyToOne
