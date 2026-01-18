@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -111,6 +112,26 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     // }
 
     @Override
+    public JobApplicationResponseDto updateJobStatus(
+        Long userId,
+        Long jobId,
+        ApplicationStatus status
+    ){
+        JobApplication job=jobApplicationRepository.findById(jobId)
+        .orElseThrow(()->
+    new ResponseStatusException(HttpStatus.NOT_FOUND,"JobNot Found"));
+    
+
+    if(!job.getUser().getId().equals(userId)){
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You Are note Allowed to update this job");
+    }
+
+    job.setStatus(status);
+
+    JobApplication updatedJob=jobApplicationRepository.save(job);
+    return mapToResponseDto(updatedJob);
+    }
+    @Override
 public void deleteJob(Long jobId, Long userId) {
 
     JobApplication job = jobApplicationRepository.findById(jobId)
@@ -128,6 +149,7 @@ public void deleteJob(Long jobId, Long userId) {
     jobApplicationRepository.delete(job);
 }
 
+
     // ✅ Correct mapping
     private JobApplicationResponseDto mapToResponseDto(JobApplication job) {
 
@@ -139,6 +161,7 @@ public void deleteJob(Long jobId, Long userId) {
         dto.setStatus(job.getStatus().name());
         dto.setAppliedDate(job.getAppliedDate());
         dto.setNotes(job.getNotes());
+        
         return dto;
     }
 }

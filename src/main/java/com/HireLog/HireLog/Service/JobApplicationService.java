@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
+import com.HireLog.HireLog.Entity.ApplicationStatus;
 
 public interface JobApplicationService {
     
@@ -20,6 +21,12 @@ public interface JobApplicationService {
         Long jobId,
         JobApplicationRequestDto requestDto,
         Long userId
+    );
+
+    JobApplicationResponseDto updateJobStatus(
+        Long userId,
+        Long jobId,
+        ApplicationStatus status
     );
 
     void deleteJob(Long jobId,Long userId);

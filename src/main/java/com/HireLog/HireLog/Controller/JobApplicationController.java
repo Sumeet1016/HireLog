@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
+import com.HireLog.HireLog.Dto.job.jobStatusUpdateRequetDto;
 import com.HireLog.HireLog.Service.JobApplicationService;
 
 import jakarta.validation.Valid;
@@ -62,6 +63,18 @@ public class JobApplicationController {
     ){
         return ResponseEntity.ok(jobApplicationService.updateJob(jobId, requestDto, userId));
     }
+
+    @PutMapping("/{jobId}/staus")
+    public ResponseEntity<JobApplicationResponseDto> updateJobStatus(
+        @PathVariable Long userId,
+        @PathVariable Long jobId,
+        @Valid @RequestBody jobStatusUpdateRequetDto requetDto
+    ){
+        JobApplicationResponseDto response=jobApplicationService.updateJobStatus(userId, jobId, requetDto.getStatus());
+    
+        return ResponseEntity.ok(response);
+    }
+
 
     @DeleteMapping("/{jobId}")
     public ResponseEntity<Void> deleteJob(
