@@ -1,7 +1,7 @@
 package com.HireLog.HireLog.Service;
 
-import java.util.List;
 
+import org.springframework.data.domain.Page;
 import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Entity.ApplicationStatus;
@@ -13,7 +13,13 @@ public interface JobApplicationService {
         Long userId
     );
 
-    List <JobApplicationResponseDto> getAllJobs(Long userId);
+    Page<JobApplicationResponseDto> getAllJobs(
+        Long userId,
+        int page,
+        int size,
+        String sortBy,
+        String sortDir
+    );
 
     JobApplicationResponseDto getJobById(Long jobId,Long userId);
 

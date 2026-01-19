@@ -1,11 +1,12 @@
 package com.HireLog.HireLog.Service.Impl;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
+
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -49,15 +50,27 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         return mapToResponseDto(savedJob);
     }
 
+  
+
     @Override
-    public List<JobApplicationResponseDto> getAllJobs(Long userId) {
+    public Page<JobApplicationResponseDto> getAllJobs(
+            Long userId,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir) {
 
-        List<JobApplication> jobs = jobApplicationRepository.findByUserId(userId);
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
-        return jobs.stream()
-                .map(this::mapToResponseDto)
-                .collect(Collectors.toList());
+        PageRequest pageable = PageRequest.of(page, size, sort);
+
+        Page<JobApplication> jobsPage = jobApplicationRepository.findByUserId(userId, pageable);
+
+        return jobsPage.map(this::mapToResponseDto);
     }
+
 
     @Override
     public JobApplicationResponseDto getJobById(Long jobId, Long userId) {
@@ -98,18 +111,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         return mapToResponseDto(updatedJob);
     }
 
-    // @Override
-    // public void deleteJob(Long userId, Long jobId) {
 
-    //     JobApplication job = jobApplicationRepository.findById(jobId)
-    //             .orElseThrow(() -> new RuntimeException("Job not found"));
-
-    //     if (!job.getUser().getId().equals(userId)) {
-    //         throw new RuntimeException("Unauthorized access");
-    //     }
-
-    //     jobApplicationRepository.delete(job);
-    // }
 
     @Override
     public JobApplicationResponseDto updateJobStatus(
