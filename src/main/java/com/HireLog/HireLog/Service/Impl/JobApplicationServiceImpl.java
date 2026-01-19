@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -83,6 +84,19 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         }
 
         return mapToResponseDto(job);
+    }
+
+    @Override
+    public Page<JobApplication> getJobs(
+        Long userId,
+        ApplicationStatus status,
+        Pageable pageable
+    ){
+        if(status==null){
+            return jobApplicationRepository.findByUserId(userId, pageable);
+        }
+
+        return jobApplicationRepository.findByUserIdAndStatus(userId, status, pageable);
     }
 
     @Override

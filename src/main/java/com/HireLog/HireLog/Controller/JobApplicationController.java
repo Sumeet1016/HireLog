@@ -43,7 +43,7 @@ public class JobApplicationController {
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    @GetMapping("/users/{userId}/jobs")
+    @GetMapping
     public ResponseEntity<Page<JobApplicationResponseDto>> getAllJobs(
         @PathVariable Long userId,
         @RequestParam(defaultValue = "0") int page,
