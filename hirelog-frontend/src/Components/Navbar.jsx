@@ -1,11 +1,12 @@
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid custom-navbar">
         {/* LEFT */}
-        <a className="navbar-brand nav-left" href="#">
+        <Link className="navbar-brand" to="/">
           HireLog
-        </a>
+        </Link>
 
         <button
           className="navbar-toggler"
@@ -22,9 +23,9 @@ const Navbar = () => {
         >
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link active" href="#">
-                Guest-User
-              </a>
+              <Link className="nav-link" to="./add-job">
+                Add Job
+              </Link>
             </li>
           </ul>
         </div>

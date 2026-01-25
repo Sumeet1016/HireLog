@@ -4,7 +4,7 @@ const JobsCard=({job})=>{
       <div class="card">
         <div class="card-body">
           <div className="companyRow">
-            <h5 class="card-title ">{job.name}</h5>
+            <h5 class="card-title ">{job.company}</h5>
             <h5 class="card-title ">Interview</h5>
           </div>
           <h6 class="card-subtitle mb-2 text-body-secondary">{job.title}</h6>
