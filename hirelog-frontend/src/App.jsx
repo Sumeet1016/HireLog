@@ -2,11 +2,13 @@
 import './App.css'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
+import Jobs from './Components/Jobs'
 function App() {
 
   return <div>
     <Navbar/>
-    <Footer></Footer>
+    <Jobs/>
+    <Footer/>
     </div>
 }
 
