@@ -18,13 +18,14 @@ import com.HireLog.HireLog.Service.JobApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
 
-
+// @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/users/{userId}/jobs")
 @RequiredArgsConstructor
@@ -72,7 +73,7 @@ public class JobApplicationController {
         return ResponseEntity.ok(jobApplicationService.updateJob(jobId, requestDto, userId));
     }
 
-    @PutMapping("/{jobId}/staus")
+    @PutMapping("/{jobId}/status")
     public ResponseEntity<JobApplicationResponseDto> updateJobStatus(
         @PathVariable Long userId,
         @PathVariable Long jobId,

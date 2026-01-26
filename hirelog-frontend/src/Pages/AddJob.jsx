@@ -1,29 +1,41 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../API/api";
 
-const AddJob = ({ addJob }) => {
-  const [company, setCompany] = useState("");
-  const [title, setTitle] = useState("");
+const AddJob = () => {
+  const [companyName, setCompanyName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [appliedOn, setAppliedOn] = useState("");
+  const [appliedDate, setAppliedDate] = useState("");
   const [notes, setNotes] = useState("");
+  const[loading,setLoading]=useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
 
     const newJob = {
-      id: Date.now(),
-      company,
-      title,
+      companyName,
+      jobTitle,
       location,
-      appliedOn,
+      appliedDate,
       notes,
+      status:"Applied",
+      userId:1,
     };
 
-    addJob(newJob);
-    navigate("/");
+
+    try{
+      setLoading(true);
+      await api.post("/api/users/1/jobs", newJob);
+      navigate("/");
+    }catch{
+      alert("Failed to add job");
+    }
+    finally{
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,8 +45,8 @@ const AddJob = ({ addJob }) => {
         <input
           type="text"
           className="form-control"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
         />
       </div>
 
@@ -43,8 +55,8 @@ const AddJob = ({ addJob }) => {
         <input
           type="text"
           className="form-control"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={jobTitle}
+          onChange={(e) => setJobTitle(e.target.value)}
         />
       </div>
 
@@ -63,8 +75,8 @@ const AddJob = ({ addJob }) => {
         <input
           type="date"
           className="form-control"
-          value={appliedOn}
-          onChange={(e) => setAppliedOn(e.target.value)}
+          value={appliedDate}
+          onChange={(e) => setAppliedDate(e.target.value)}
         />
       </div>
 
@@ -78,8 +90,8 @@ const AddJob = ({ addJob }) => {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary">
-        Submit
+      <button type="submit" className="btn btn-primary" disabled={loading}>
+        {loading?"Saving..":"Submit"}
       </button>
     </form>
   );
