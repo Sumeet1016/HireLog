@@ -21,7 +21,8 @@ public interface JobApplicationService {
         int page,
         int size,
         String sortBy,
-        String sortDir
+        String sortDir,
+        ApplicationStatus status
     );
 
     JobApplicationResponseDto getJobById(Long jobId,Long userId);

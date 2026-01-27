@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Dto.job.jobStatusUpdateRequetDto;
+import com.HireLog.HireLog.Entity.ApplicationStatus;
 import com.HireLog.HireLog.Service.JobApplicationService;
 
 import jakarta.validation.Valid;
@@ -46,15 +47,36 @@ public class JobApplicationController {
 
     @GetMapping
     public ResponseEntity<Page<JobApplicationResponseDto>> getAllJobs(
-        @PathVariable Long userId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createdAt") String sortBy,
-        @RequestParam(defaultValue = "desc") String sortDir){
-            Page<JobApplicationResponseDto> jobs=jobApplicationService.getAllJobs(userId, page, size, sortBy, sortDir);
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir,
+            @RequestParam(required = false) String status 
+    ) {
+        ApplicationStatus statusEnum = null;
 
-            return ResponseEntity.ok(jobs);
+        if (status != null && !status.isEmpty()) {
+            try {
+                statusEnum = ApplicationStatus.valueOf(status.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(Page.empty()); 
+            }
         }
+
+        Page<JobApplicationResponseDto> jobs = jobApplicationService.getAllJobs(
+                userId,
+                page,
+                size,
+                sortBy,
+                sortDir,
+                statusEnum
+        );
+
+        return ResponseEntity.ok(jobs);
+    }
 
     @GetMapping("{jobId}")
     public  ResponseEntity<JobApplicationResponseDto> getJobById(

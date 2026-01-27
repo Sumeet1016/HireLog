@@ -55,11 +55,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public Page<JobApplicationResponseDto> getAllJobs(
-            Long userId,
-            int page,
-            int size,
-            String sortBy,
-            String sortDir) {
+            Long userId, int page, int size, String sortBy, String sortDir, ApplicationStatus status) {
 
         Sort sort = sortDir.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
@@ -67,7 +63,13 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
         PageRequest pageable = PageRequest.of(page, size, sort);
 
-        Page<JobApplication> jobsPage = jobApplicationRepository.findByUserId(userId, pageable);
+        Page<JobApplication> jobsPage;
+
+        if (status != null) {
+            jobsPage = jobApplicationRepository.findByUserIdAndStatus(userId, status, pageable);
+        } else {
+            jobsPage = jobApplicationRepository.findByUserId(userId, pageable);
+        }
 
         return jobsPage.map(this::mapToResponseDto);
     }

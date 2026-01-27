@@ -1,17 +1,29 @@
 * {
 }
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  height: 60px;
+}
+
+
 
 .custom-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+body {
+  padding-bottom: 60px;
 }
 
 .companyRow {
