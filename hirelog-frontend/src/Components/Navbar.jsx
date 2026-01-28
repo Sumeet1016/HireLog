@@ -1,65 +1,39 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { removeToken } from "../utils/auth";
+
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    removeToken();
+    navigate("/login");
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid custom-navbar">
-        {/* LEFT */}
-        <Link className="navbar-brand" to="/">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to="/jobs">
           HireLog
         </Link>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div
-          className="collapse navbar-collapse nav-center"
-          id="navbarNavDropdown"
-        >
-          <ul className="navbar-nav">
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="./add-job">
+              <Link className="nav-link" to="/jobs">
+                Jobs
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/jobs/add">
                 Add Job
               </Link>
             </li>
           </ul>
-        </div>
 
-        {/* RIGHT */}
-        <div className="nav-right">
-          <ul className="navbar-nav">
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                Add Job
-              </a>
-              <ul className="dropdown-menu">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-            </li>
-          </ul>
+          <button className="btn btn-outline-danger" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </div>
     </nav>

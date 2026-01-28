@@ -11,5 +11,5 @@ export const removeToken = () => {
 };
 
 export const isAuthenticated = () => {
-  return !!getToken();
+  return Boolean(localStorage.getItem("token"));
 };

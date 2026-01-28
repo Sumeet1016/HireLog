@@ -99,7 +99,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         JobApplication job = jobApplicationRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        if (!job.getUser().getId().equals(email)) {
+        if (!job.getUser().getEmail().equals(email)) {
             throw new RuntimeException("Unauthorized access");
         }
 

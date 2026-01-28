@@ -6,40 +6,37 @@ const AddJob = () => {
   const [companyName, setCompanyName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [appliedDate, setAppliedDate] = useState("");
   const [notes, setNotes] = useState("");
-  const[loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newJob = {
       companyName,
       jobTitle,
       location,
-      appliedDate,
       notes,
-      status:"Applied",
-      userId:1,
     };
 
-
-    try{
+    try {
       setLoading(true);
-      await api.post("/api/users/1/jobs", newJob);
-      navigate("/");
-    }catch{
+      await api.post("/api/jobs", newJob);
+      navigate("/jobs");
+    } catch (error) {
+      console.error(error.response?.data || error.message);
       alert("Failed to add job");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="container mt-4">
+      <h3>Add Job</h3>
+
       <div className="mb-3">
         <label className="form-label">Company Name</label>
         <input
@@ -47,6 +44,7 @@ const AddJob = () => {
           className="form-control"
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
+          required
         />
       </div>
 
@@ -57,6 +55,7 @@ const AddJob = () => {
           className="form-control"
           value={jobTitle}
           onChange={(e) => setJobTitle(e.target.value)}
+          required
         />
       </div>
 
@@ -67,16 +66,7 @@ const AddJob = () => {
           className="form-control"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="form-label">Applied On</label>
-        <input
-          type="date"
-          className="form-control"
-          value={appliedDate}
-          onChange={(e) => setAppliedDate(e.target.value)}
+          required
         />
       </div>
 
@@ -91,7 +81,7 @@ const AddJob = () => {
       </div>
 
       <button type="submit" className="btn btn-primary" disabled={loading}>
-        {loading?"Saving..":"Submit"}
+        {loading ? "Saving..." : "Submit"}
       </button>
     </form>
   );
