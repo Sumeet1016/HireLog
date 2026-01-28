@@ -1,26 +1,23 @@
-
-import './App.css'
-import Navbar from './Components/Navbar'
-import Footer from './Components/Footer'
-import Jobs from './Pages/Jobs'
-import AppRoutes from "./Routes/AppRoutes"
-import { useState } from 'react'
-import { BrowserRouter } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
+import AppRoutes from "./Routes/AppRoutes";
+import "./App.css";
+import "./index.css";
 
 function App() {
-  const [jobs,setJobs]=useState([]);
-
-  const addJob=(job)=>{
-    setJobs((prev)=>[...prev,job]);
-  };
+  const location = useLocation();
+  const hideLayout = location.pathname === "/login";
 
   return (
     <>
-      <Navbar />
-      <main>
+      {!hideLayout && <Navbar />}
+
+      <main className="min-h-screen px-6 py-4">
         <AppRoutes />
       </main>
-      <Footer />
+
+      {!hideLayout && <Footer />}
     </>
   );
 }

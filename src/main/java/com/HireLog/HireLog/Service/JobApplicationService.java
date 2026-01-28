@@ -12,35 +12,29 @@ import com.HireLog.HireLog.Entity.JobApplication;
 public interface JobApplicationService {
     
     JobApplicationResponseDto createJob(
-        JobApplicationRequestDto requestDto,
-        Long userId
-    );
+            JobApplicationRequestDto requestDto,
+            String email);
 
     Page<JobApplicationResponseDto> getAllJobs(
-        Long userId,
-        int page,
-        int size,
-        String sortBy,
-        String sortDir,
-        ApplicationStatus status
-    );
+            String email,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir,
+            ApplicationStatus status);
 
-    JobApplicationResponseDto getJobById(Long jobId,Long userId);
+    JobApplicationResponseDto getJobById(Long jobId, String email);
 
     JobApplicationResponseDto updateJob(
-        Long jobId,
-        JobApplicationRequestDto requestDto,
-        Long userId
-    );
+            Long jobId,
+            JobApplicationRequestDto requestDto,
+            String email);
 
     JobApplicationResponseDto updateJobStatus(
-        Long userId,
-        Long jobId,
-        ApplicationStatus status
-    );
+            Long jobId,
+            String email,
+            ApplicationStatus status);
 
-    Page<JobApplication> getJobs(Long userId,ApplicationStatus status,Pageable pageable);
-
-    void deleteJob(Long jobId,Long userId);
+    void deleteJob(Long jobId, String email);
 
 }

@@ -6,9 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.HireLog.HireLog.Entity.ApplicationStatus;
 import com.HireLog.HireLog.Entity.JobApplication;
+import com.HireLog.HireLog.Entity.User;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication,Long> {
-    Page <JobApplication> findByUserId(Long userId,Pageable pageable);
+    Page<JobApplication> findByUser(User user, Pageable pageable);
 
-    Page<JobApplication> findByUserIdAndStatus(Long userId,ApplicationStatus status,Pageable pageable);
+    Page<JobApplication> findByUserAndStatus(
+            User user,
+            ApplicationStatus status,
+            Pageable pageable);
 }

@@ -1,14 +1,24 @@
-import AddJob from "../Pages/AddJob";
+import { Routes, Route } from "react-router-dom";
+import Login from "../Pages/Login";
 import Jobs from "../Pages/Jobs";
-import {Routes,Route} from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
 
-const AppRoutes=()=>{
- return (
+const AppRoutes = () => {
+  return (
     <Routes>
-        <Route path="/" element={<Jobs/>}/>
-        <Route path="/add-job" element={<AddJob/>}/>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/jobs"
+        element={
+          <PrivateRoute>
+            <Jobs />
+          </PrivateRoute>
+        }
+      />
+      {/* Redirect unknown routes to /login */}
+      <Route path="*" element={<Login />} />
     </Routes>
- )
-}
+  );
+};
 
 export default AppRoutes;

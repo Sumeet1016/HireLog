@@ -32,10 +32,10 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     public JobApplicationResponseDto createJob(
             JobApplicationRequestDto requestDto,
-            Long userId) {
+            String email) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         JobApplication job = new JobApplication();
         job.setCompanyName(requestDto.getCompanyName());
@@ -46,71 +46,60 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         job.setStatus(ApplicationStatus.APPLIED);
         job.setUser(user);
 
-        JobApplication savedJob = jobApplicationRepository.save(job);
-
-        return mapToResponseDto(savedJob);
+        return mapToResponseDto(jobApplicationRepository.save(job));
     }
 
   
 
     @Override
     public Page<JobApplicationResponseDto> getAllJobs(
-            Long userId, int page, int size, String sortBy, String sortDir, ApplicationStatus status) {
+            String email,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir,
+            ApplicationStatus status) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         Sort sort = sortDir.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
 
-        PageRequest pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<JobApplication> jobsPage;
+        Page<JobApplication> jobs = (status == null)
+                ? jobApplicationRepository.findByUser(user, pageable)
+                : jobApplicationRepository.findByUserAndStatus(user, status, pageable);
 
-        if (status != null) {
-            jobsPage = jobApplicationRepository.findByUserIdAndStatus(userId, status, pageable);
-        } else {
-            jobsPage = jobApplicationRepository.findByUserId(userId, pageable);
-        }
-
-        return jobsPage.map(this::mapToResponseDto);
+        return jobs.map(this::mapToResponseDto);
     }
 
-
     @Override
-    public JobApplicationResponseDto getJobById(Long jobId, Long userId) {
+    public JobApplicationResponseDto getJobById(Long jobId, String email) {
 
         JobApplication job = jobApplicationRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
 
-        if (!job.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized access");
+        if (!job.getUser().getEmail().equals(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
         }
 
         return mapToResponseDto(job);
     }
 
-    @Override
-    public Page<JobApplication> getJobs(
-        Long userId,
-        ApplicationStatus status,
-        Pageable pageable
-    ){
-        if(status==null){
-            return jobApplicationRepository.findByUserId(userId, pageable);
-        }
-
-        return jobApplicationRepository.findByUserIdAndStatus(userId, status, pageable);
-    }
 
     @Override
     public JobApplicationResponseDto updateJob(
             Long jobId,
             JobApplicationRequestDto requestDto,
-            Long userId) {
+            String email) {
 
         JobApplication job = jobApplicationRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
-        if (!job.getUser().getId().equals(userId)) {
+        if (!job.getUser().getId().equals(email)) {
             throw new RuntimeException("Unauthorized access");
         }
 
@@ -128,44 +117,35 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
 
-
     @Override
     public JobApplicationResponseDto updateJobStatus(
-        Long userId,
-        Long jobId,
-        ApplicationStatus status
-    ){
-        JobApplication job=jobApplicationRepository.findById(jobId)
-        .orElseThrow(()->
-    new ResponseStatusException(HttpStatus.NOT_FOUND,"JobNot Found"));
-    
+            Long jobId,
+            String email,
+            ApplicationStatus status) {
 
-    if(!job.getUser().getId().equals(userId)){
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You Are note Allowed to update this job");
+        JobApplication job = jobApplicationRepository.findById(jobId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
+
+        if (!job.getUser().getEmail().equals(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+        }
+
+        job.setStatus(status);
+        return mapToResponseDto(jobApplicationRepository.save(job));
     }
 
-    job.setStatus(status);
-
-    JobApplication updatedJob=jobApplicationRepository.save(job);
-    return mapToResponseDto(updatedJob);
-    }
     @Override
-public void deleteJob(Long jobId, Long userId) {
+    public void deleteJob(Long jobId, String email) {
 
-    JobApplication job = jobApplicationRepository.findById(jobId)
-        .orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found")
-        );
+        JobApplication job = jobApplicationRepository.findById(jobId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job not found"));
 
-    if (!job.getUser().getId().equals(userId)) {
-        throw new ResponseStatusException(
-            HttpStatus.FORBIDDEN,
-            "You are not allowed to delete this job"
-        );
+        if (!job.getUser().getEmail().equals(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unauthorized");
+        }
+
+        jobApplicationRepository.delete(job);
     }
-
-    jobApplicationRepository.delete(job);
-}
 
 
     // ✅ Correct mapping
