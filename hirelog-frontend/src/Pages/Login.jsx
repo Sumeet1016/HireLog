@@ -5,10 +5,12 @@ import { useState } from "react";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await api.post("/auth/login", {
@@ -24,40 +26,94 @@ const Login = () => {
       }
 
       localStorage.setItem("token", token);
-
       navigate("/jobs");
     } catch (err) {
-      alert("Invalid credentials");
+      alert("Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6 col-xl-5">
+          <div className="auth-container">
+            {/* Logo/Brand */}
+            <div className="text-center mb-5">
+              <h1 className="h2 fw-bold text-primary mb-2">HireLog</h1>
+              <p className="text-muted">Track your job applications journey</p>
+            </div>
 
-      <form onSubmit={handleLogin} className="space-y-4">
-        <input
-          placeholder="Email"
-          className="w-full border p-2"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+            <h2 className="auth-title">Welcome Back</h2>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-2"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+            <form onSubmit={handleLogin} className="mt-4">
+              <div className="mb-4">
+                <label className="form-label fw-semibold">
+                  <i className="bi bi-envelope me-2"></i>
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  className="form-control py-2"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-        <button className="w-full bg-black text-white py-2">Login</button>
-      </form>
+              <div className="mb-4">
+                <label className="form-label fw-semibold">
+                  <i className="bi bi-lock me-2"></i>
+                  Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  className="form-control py-2"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-      <p className="text-center mt-4">
-        Don’t have an account?{" "}
-        <Link to="/register" className="text-blue-500">
-          Register
-        </Link>
-      </p>
+              <button
+                type="submit"
+                className="btn btn-primary w-100 py-2 mt-3"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Signing In...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-box-arrow-in-right me-2"></i>
+                    Sign In
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="text-center mt-4 pt-3 border-top">
+              <p className="text-muted mb-2">
+                Don't have an account?{" "}
+                <Link
+                  to="/register"
+                  className="fw-semibold text-primary text-decoration-none"
+                >
+                  Create one now
+                </Link>
+              </p>
+              <p className="text-muted small mt-3">
+                By signing in, you agree to our Terms and Privacy Policy
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
