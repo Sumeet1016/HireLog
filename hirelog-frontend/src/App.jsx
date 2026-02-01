@@ -1,6 +1,5 @@
-import { useLocation } from "react-router-dom";
+ import { useLocation } from "react-router-dom";
 import Navbar from "./Components/Navbar";
-
 import Footer from "./Components/Footer";
 import AppRoutes from "./Routes/AppRoutes";
 import "./App.css";
@@ -22,4 +21,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;  // MAKE SURE THIS LINE EXISTS!

@@ -157,3 +157,85 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Navbar */
+.navbar {
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+/* Sidebar */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Footer */
+footer a:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+    min-height: auto;
+    position: static;
+  }
+  
+  .navbar {
+    padding: 0.75rem 0;
+  }
+}
+
+/* Job Card specific */
+.companyRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notesSection {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .pagination .page-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .job-card {
+    margin-bottom: 1rem;
+  }
+  
+  .filter-section .form-select-sm {
+    font-size: 0.875rem;
+  }
+  
+  /* Prevent zoom on input focus */
+  select, input, textarea {
+    font-size: 16px;
+  }
+}
+
+/* Better touch targets */
+.btn, .page-link, .form-select {
+  min-height: 44px; /* Apple's recommended minimum */
+}
+
+/* Disable text selection on interactive elements */
+button, select {
+  user-select: none;
+  -webkit-user-select: none;
+}

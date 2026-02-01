@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createJob } from "../API/jobApi";
 
@@ -12,18 +12,48 @@ const AddJob = () => {
     notes: "",
   });
 
+  // Check authentication before rendering
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log("No token found, redirecting to login");
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Get token and check
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Your session has expired. Please login again.");
+      navigate("/login");
+      return;
+    }
+
     try {
       setLoading(true);
+      // This calls POST /jobs (correct according to your controller)
       await createJob(form);
       navigate("/jobs");
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to add job");
+      console.error("Add job error:", err);
+
+      // Check error type
+      if (err.response?.status === 401) {
+        alert("Authentication failed. Please login again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        alert(
+          err.response?.data?.message || "Failed to add job. Please try again.",
+        );
+      }
     } finally {
       setLoading(false);
     }

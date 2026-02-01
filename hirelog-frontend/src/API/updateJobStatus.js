@@ -1,5 +1,5 @@
 import api from "./api";
 
-export const updateJobStatus=(userId,jobId,status)=>{
+export const updateJobStatus=(jobId,status)=>{
     return api.put(`/jobs/${jobId}/status`,{status});
 }
