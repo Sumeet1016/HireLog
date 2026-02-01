@@ -29,7 +29,7 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    // CHANGE THIS: Remove "/api/auth" from @PostMapping
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -43,7 +43,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    // CHANGE THIS: Remove "/api/auth" from @PostMapping
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {

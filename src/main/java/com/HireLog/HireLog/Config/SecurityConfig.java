@@ -24,52 +24,45 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-    // ✅ PASSWORD ENCODER
+    // PASSWORD ENCODER
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ SECURITY FILTER CHAIN
+    // SECURITY FILTER CHAIN
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // ✅ Enable CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // ✅ Disable CSRF (JWT-based auth)
                 .csrf(csrf -> csrf.disable())
 
-                // ✅ Stateless session (VERY IMPORTANT)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // ✅ Authorization rules
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated())
 
-                // ✅ JWT filter BEFORE username/password auth
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ CORS CONFIGURATION
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // ✅ Vite dev server
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
 
-        // ✅ Allow common HTTP methods
+        //  Allow common HTTP methods
         configuration.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // ✅ Allow all headers (Authorization included)
+        // Allow all headers (Authorization included)
         configuration.setAllowedHeaders(List.of("*"));
 
-        // ✅ Allow cookies / auth headers
+        // Allow cookies / auth headers
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -4,7 +4,6 @@ import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Dto.job.jobStatusUpdateRequetDto;
 import com.HireLog.HireLog.Entity.ApplicationStatus;
-import com.HireLog.HireLog.Entity.User;
 import com.HireLog.HireLog.Service.JobApplicationService;
 
 import jakarta.validation.Valid;

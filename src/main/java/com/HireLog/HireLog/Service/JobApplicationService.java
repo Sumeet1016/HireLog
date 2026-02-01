@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Entity.ApplicationStatus;
-import com.HireLog.HireLog.Entity.JobApplication;
 
 public interface JobApplicationService {
     

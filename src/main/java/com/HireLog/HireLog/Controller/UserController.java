@@ -26,15 +26,6 @@ public class UserController {
     public UserController(UserService userService){
         this.userService=userService;
     }
-
-    // @PostMapping("/register")
-    // public ResponseEntity<User> registerUser(@RequestBody User user){
-    //     return new ResponseEntity<>(
-    //         userService.registerUser(user),
-    //         HttpStatus.CREATED);
-        
-    // }
-
     @PostMapping
     public ResponseEntity<UserResponseDto> registerUser(
         @Valid @RequestBody UserRequestDto requestDto)
@@ -58,7 +49,6 @@ public class UserController {
 
     }
 
-    //if we use 2 getmapping at same level it causes is issue
     @GetMapping("/by-email")
     public ResponseEntity<UserResponseDto> getUserByEmail(@RequestParam String email){
         User user=userService.getUserByEmail(email);
