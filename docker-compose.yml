@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: hirelog-postgres
+    environment:
+      POSTGRES_DB: hirelog_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: hirelog123
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: .
+    container_name: hirelog-backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hirelog_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: hirelog123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
