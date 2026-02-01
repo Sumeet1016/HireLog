@@ -1,4 +1,4 @@
-package com.HireLog.HireLog.Controller;
+package com.HireLog.HireLog.controller;
 
 import com.HireLog.HireLog.Dto.auth.JwtResponse;
 import com.HireLog.HireLog.Dto.auth.LoginRequest;
@@ -6,9 +6,7 @@ import com.HireLog.HireLog.Dto.auth.RegisterRequest;
 import com.HireLog.HireLog.Entity.User;
 import com.HireLog.HireLog.Repository.UserRepository;
 import com.HireLog.HireLog.security.JwtUtil;
-
 import jakarta.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -32,9 +29,9 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+    // CHANGE THIS: Remove "/api/auth" from @PostMapping
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -45,21 +42,21 @@ public class AuthController {
         String token = jwtUtil.generateToken(user.getEmail());
         return ResponseEntity.ok(new JwtResponse(token));
     }
-   @PostMapping("/register")
-public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 
-    if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-        return ResponseEntity.badRequest().body("Email already registered");
+    // CHANGE THIS: Remove "/api/auth" from @PostMapping
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already registered");
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
-
-    User user = new User();
-    user.setName(request.getName());
-    user.setEmail(request.getEmail());
-    user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-    userRepository.save(user);
-
-    return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
-}
-
 }

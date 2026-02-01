@@ -3,11 +3,14 @@ import Login from "../Pages/Login";
 import Jobs from "../Pages/Jobs";
 import AddJob from "../Pages/AddJob";
 import PrivateRoute from "./PrivateRoute";
+import Register from "../Pages/Register";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+
+      <Route path="/register" element={<Register />} />
 
       <Route
         path="/jobs"

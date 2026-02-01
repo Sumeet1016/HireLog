@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { removeToken } from "../utils/auth";
 
 const Navbar = () => {
@@ -10,31 +10,25 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/jobs">
-          HireLog
-        </Link>
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-left">
+          <div className="navbar-brand">HireLog</div>
 
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/jobs">
-                Jobs
-              </Link>
-            </li>
+          <div className="nav-links">
+            <NavLink to="/jobs" className="nav-link">
+              Jobs
+            </NavLink>
 
-            <li className="nav-item">
-              <Link className="nav-link" to="/jobs/add">
-                Add Job
-              </Link>
-            </li>
-          </ul>
-
-          <button className="btn btn-outline-danger" onClick={handleLogout}>
-            Logout
-          </button>
+            <NavLink to="/jobs/add" className="nav-link">
+              Add Job
+            </NavLink>
+          </div>
         </div>
+
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </nav>
   );

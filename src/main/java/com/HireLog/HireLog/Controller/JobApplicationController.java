@@ -1,20 +1,24 @@
-package com.HireLog.HireLog.Controller;
+package com.HireLog.HireLog.controller;
 
 import com.HireLog.HireLog.Dto.job.JobApplicationRequestDto;
 import com.HireLog.HireLog.Dto.job.JobApplicationResponseDto;
 import com.HireLog.HireLog.Dto.job.jobStatusUpdateRequetDto;
 import com.HireLog.HireLog.Entity.ApplicationStatus;
+import com.HireLog.HireLog.Entity.User;
 import com.HireLog.HireLog.Service.JobApplicationService;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/jobs")
+@RequestMapping("/jobs")
 @RequiredArgsConstructor
 public class JobApplicationController {
 
@@ -24,8 +28,8 @@ public class JobApplicationController {
     @PostMapping
     public ResponseEntity<JobApplicationResponseDto> createJob(
             @Valid @RequestBody JobApplicationRequestDto requestDto,
-            Authentication authentication) {
-        String email = authentication.getName();
+            @AuthenticationPrincipal String email) {
+
         JobApplicationResponseDto response = jobApplicationService.createJob(requestDto, email);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -34,23 +38,18 @@ public class JobApplicationController {
     // GET ALL JOBS
     @GetMapping
     public ResponseEntity<Page<JobApplicationResponseDto>> getAllJobs(
-            Authentication authentication,
+            @AuthenticationPrincipal String email,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir,
             @RequestParam(required = false) String status) {
+
         ApplicationStatus statusEnum = null;
 
         if (status != null && !status.isEmpty()) {
-            try {
-                statusEnum = ApplicationStatus.valueOf(status.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body(Page.empty());
-            }
+            statusEnum = ApplicationStatus.valueOf(status.toUpperCase());
         }
-
-        String email = authentication.getName();
 
         Page<JobApplicationResponseDto> jobs = jobApplicationService.getAllJobs(
                 email, page, size, sortBy, sortDir, statusEnum);
@@ -62,8 +61,8 @@ public class JobApplicationController {
     @GetMapping("/{jobId}")
     public ResponseEntity<JobApplicationResponseDto> getJobById(
             @PathVariable Long jobId,
-            Authentication authentication) {
-        String email = authentication.getName();
+            @AuthenticationPrincipal String email) {
+
         return ResponseEntity.ok(
                 jobApplicationService.getJobById(jobId, email));
     }
@@ -73,8 +72,8 @@ public class JobApplicationController {
     public ResponseEntity<JobApplicationResponseDto> updateJob(
             @PathVariable Long jobId,
             @Valid @RequestBody JobApplicationRequestDto requestDto,
-            Authentication authentication) {
-        String email = authentication.getName();
+            @AuthenticationPrincipal String email) {
+
         return ResponseEntity.ok(
                 jobApplicationService.updateJob(jobId, requestDto, email));
     }
@@ -84,8 +83,8 @@ public class JobApplicationController {
     public ResponseEntity<JobApplicationResponseDto> updateJobStatus(
             @PathVariable Long jobId,
             @Valid @RequestBody jobStatusUpdateRequetDto requestDto,
-            Authentication authentication) {
-        String email = authentication.getName();
+            @AuthenticationPrincipal String email) {
+
         return ResponseEntity.ok(
                 jobApplicationService.updateJobStatus(
                         jobId, email, requestDto.getStatus()));
@@ -95,8 +94,8 @@ public class JobApplicationController {
     @DeleteMapping("/{jobId}")
     public ResponseEntity<Void> deleteJob(
             @PathVariable Long jobId,
-            Authentication authentication) {
-        String email = authentication.getName();
+            @AuthenticationPrincipal String email) {
+
         jobApplicationService.deleteJob(jobId, email);
         return ResponseEntity.noContent().build();
     }

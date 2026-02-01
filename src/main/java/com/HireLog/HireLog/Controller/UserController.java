@@ -1,4 +1,4 @@
-package com.HireLog.HireLog.Controller;
+package com.HireLog.HireLog.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
