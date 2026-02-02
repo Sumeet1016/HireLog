@@ -80,7 +80,7 @@ Sumeet Yadav
 
 💼 GitHub: https://github.com/Sumeet1016
 
-🔗 LinkedIn: [Your LinkedIn Profile Link]
+🔗 LinkedIn:https://www.linkedin.com/in/sumeet-yadav-996101325?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
 
 ⭐ Like HireLog? Give it a star on GitHub!
 Help support the project by starring the repo ⭐ and sharing it with fellow job seekers!
