@@ -13,14 +13,30 @@ const Footer = () => {
               an opportunity.
             </p>
             <div className="d-flex gap-3">
-              <a href="#" className="text-secondary">
-                <i className="bi bi-twitter fs-5"></i>
-              </a>
-              <a href="#" className="text-secondary">
+              <a
+                href="https://www.linkedin.com/in/sumeet-yadav-996101325"
+                className="text-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Visit my LinkedIn profile"
+              >
                 <i className="bi bi-linkedin fs-5"></i>
               </a>
-              <a href="#" className="text-secondary">
+              <a
+                href="https://github.com/Sumeet1016"
+                className="text-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Visit my GitHub profile"
+              >
                 <i className="bi bi-github fs-5"></i>
+              </a>
+              <a
+                href="mailto:sumeety08@gmail.com"
+                className="text-secondary"
+                title="Send me an email"
+              >
+                <i className="bi bi-envelope fs-5"></i>
               </a>
             </div>
           </div>
@@ -93,6 +109,18 @@ const Footer = () => {
                 Subscribe
               </button>
             </div>
+
+            {/* Your personal info */}
+            <div className="mt-4 pt-3 border-top">
+              <p className="small text-muted mb-1">
+                <i className="bi bi-person me-1"></i>
+                Developed by Sumeet Yadav
+              </p>
+              <p className="small text-muted mb-0">
+                <i className="bi bi-envelope me-1"></i>
+                sumeety08@gmail.com
+              </p>
+            </div>
           </div>
         </div>
 
@@ -112,6 +140,37 @@ const Footer = () => {
                 Cookie Policy
               </a>
             </div>
+          </div>
+
+          {/* Attribution line */}
+          <div className="text-center mt-3">
+            <p className="text-muted small">
+              Connect with the developer:{" "}
+              <a
+                href="https://www.linkedin.com/in/sumeet-yadav-996101325"
+                className="text-primary text-decoration-none"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>{" "}
+              •{" "}
+              <a
+                href="https://github.com/Sumeet1016"
+                className="text-primary text-decoration-none"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>{" "}
+              •{" "}
+              <a
+                href="mailto:sumeety08@gmail.com"
+                className="text-primary text-decoration-none"
+              >
+                Email
+              </a>
+            </p>
           </div>
         </div>
       </div>
